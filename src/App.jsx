@@ -1,34 +1,26 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import SearchBar from './components/SearchBar';
 import GuideCard from './components/GuideCard';
 import Walkthrough from './components/Walkthrough';
 import { Smartphone, LayoutGrid, HelpCircle } from 'lucide-react';
 import './App.css';
+import faqsData from './data/faqs.json';
 
 function App() {
   const [query, setQuery] = useState('');
-  const [faqs, setFaqs] = useState([]);
   const [showWalkthrough, setShowWalkthrough] = useState(true);
-
-  // Fetch FAQ data
-  useEffect(() => {
-    fetch('/data/faqs.json')
-      .then(response => response.json())
-      .then(data => setFaqs(data))
-      .catch(error => console.error("Error loading FAQs:", error));
-  }, []);
 
   // Filter FAQs based on search query
   const filteredFaqs = useMemo(() => {
-    if (!query.trim()) return faqs;
+    if (!query.trim()) return faqsData;
     const lowerQuery = query.toLowerCase();
     
-    return faqs.filter(faq => 
+    return faqsData.filter(faq => 
       faq.question.toLowerCase().includes(lowerQuery) || 
       faq.answer.toLowerCase().includes(lowerQuery) ||
       faq.category.toLowerCase().includes(lowerQuery)
     );
-  }, [faqs, query]);
+  }, [query]);
 
   return (
     <div className="app-container">
